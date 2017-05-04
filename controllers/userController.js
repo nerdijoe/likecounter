@@ -3,8 +3,8 @@ require('dotenv').config();
 
 var passwordHash = require('password-hash');
 var jwt = require('jsonwebtoken');
-
 var axios = require('axios');
+var jwt_helper = require('../helpers/jwt');
 
 var InstagramAPI = require('instagram-api');
 var instagramAPI = new InstagramAPI(process.env.ACCESS_TOKEN);
@@ -107,6 +107,16 @@ exports.get_media_recent = (req, res, next) => {
 exports.get_media_recent_by_tag = (req, res, next) => {
   var tag = req.params.tag;
   console.log(`search by tag: '${tag}'`);
+
+  // decode token to get the instagram_id
+  jwt.verify(req.headers.token, process.env.TOKEN_SECRET, (err, decoded) => {
+    if(decoded) {
+      console.log(`decoded data is: `, decoded);
+    } else {
+      res.send(err);
+    }
+  }) // end of jwt.verify
+
 
   var userid = "187611459"
   // var userid = "493881988"

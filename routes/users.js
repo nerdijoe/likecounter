@@ -2,6 +2,9 @@ var express = require('express');
 var router = express.Router();
 const passport = require('passport');
 var user_controller = require('../controllers/userController')
+var jwt_helper = require('../helpers/jwt');
+
+
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
