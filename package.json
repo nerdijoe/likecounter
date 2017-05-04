@@ -1,0 +1,25 @@
+{
+  "name": "likecounter",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "body-parser": "~1.17.1",
+    "cookie-parser": "~1.4.3",
+    "cors": "^2.8.3",
+    "debug": "~2.6.3",
+    "dotenv": "^4.0.0",
+    "ejs": "~2.5.6",
+    "express": "~4.15.2",
+    "jsonwebtoken": "^7.4.0",
+    "mongoose": "^4.9.7",
+    "morgan": "~1.8.1",
+    "nodemon": "^1.11.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "password-hash": "^1.2.2",
+    "serve-favicon": "~2.4.2"
+  }
+}
