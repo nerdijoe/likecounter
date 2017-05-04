@@ -43,7 +43,7 @@ passport.use(new Strategy(
 
     User.findOne( {username: username}, (err, user) => {
       if(err) next(err);
-
+      console.log(user)
       if(passwordHash.verify(password, user.password)) {
         next(null, user)
       } else {
