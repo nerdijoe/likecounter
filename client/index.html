@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LikeCounter</title>
+    <link href="https://fonts.googleapis.com/css?family=Changa+One:400,400i|Open+Sans:300,300i,400,400i,600" rel="stylesheet">
+    <link rel="stylesheet" href="dist/semantic.min.css">
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.min.js"></script>
+</head>
+
+<body>
+    <div id="main">
+        <nav class="ui menu teal inverted navbar page grid" style="margin-bottom: 0px">
+            <a href="" class="brand item"><h2>{{ navbar }}</h2></a>
+            <div class="right menu" v-if="login">
+                <div class="item"><button class="ui green button" id="btnLogin">Sign in</button></div>
+                <div class="item"><button class="ui primary button" id="btnSignup">Sign up</button></div>
+
+            </div>
+            <div class="right menu" v-else>
+                <div class="item">
+                    <h3>Welcome, {{ username }}</h3></div>
+                <div class="item"><button class="ui red button" v-on:click="signOut">Sign out</button></div>
+            </div>
+        </nav>
+        <div class="ui grid">
+            <div class="row">
+
+            </div>
+        </div>
+        <div class="ui hidden divider"></div>
+        <div class="ui basic segment padtop-6 container">
+            <div class="ui left action fluid icon input">
+                <div class="ui selection dropdown search-select" tabindex="0"><select>
+                    <option >Catergories Search</option>
+                    <option value="articles">Pakaian</option>
+                    <option value="products">Aksesoris</option>
+                  </select><i class="dropdown icon"></i>
+                    <div class="text">Catergories Search
+                    </div>
+                    <div class="menu transition hidden" tabindex="-1">
+                        <div class="item active selected" data-value="all">Catergories Search</div>
+                        <div class="item" data-value="articles">Pakaian</div>
+                        <div class="item" data-value="products">Aksesoris</div>
+                    </div>
+                </div>
+                <input type="text" placeholder="| Search" class="home-search-input">
+                <div type="submit" class="ui large primary button searchbtn">Search</div>
+            </div>
+        </div>
+
+        <div class="ui items segment padtop-6 container">
+            <div class="item">
+                <div class="image">
+                    <img class="ui mini image" src="images/sample.png">
+                </div>
+                <div class="content">
+                    <a class="header">Header</a>
+                    <div class="meta">
+                        <span>Description</span>
+                    </div>
+                    <div class="description">
+                        <p></p>
+                    </div>
+                    <div class="extra">
+                        <div class="ui right floated primary button">
+                            180 Likes
+                            <i class="right chevron icon"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="ui small modal four grid" id="modalLogin">
+            <i class="close icon"></i>
+            <div class="ui center aligned header">
+                <h3>Sign in</h3>
+            </div>
+
+            <div class="ui content grid container">
+
+                <div class="content">
+                    <div class="ui form fluid">
+                        <div class="field">
+                            <label>Username</label>
+                            <input class="ui left action fluid icon input" v-model="username" placeholder="Username" type="text">
+                        </div>
+                        <div class="field">
+                            <label>Password</label>
+                            <input v-model="password" placeholder="Password" type="password">
+                        </div>
+
+                        <button id="btnSubmitLogin" class="ui button green" v-on:click="onLogin">Sign in</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <div class="ui button">Cancel</div>
+            </div>
+        </div>
+
+
+        <div class="ui small modal four grid" id="modalSignup">
+            <i class="close icon"></i>
+            <div class="ui center aligned header">
+                <h3>Sign up</h3>
+            </div>
+
+            <div class="ui doubling stackable content grid container">
+                <div class="content">
+                    <div class="ui fluid form">
+                        <div class=" field">
+                            <label>Name</label>
+                            <input class="ui left action fluid icon input" v-model="name" placeholder="Name" type="text">
+                        </div>
+                        <div class=" field">
+                            <label>Username</label>
+                            <input v-model="username" placeholder="Username" type="text">
+                        </div>
+                        <div class="field">
+                            <label>Password</label>
+                            <input v-model="password" placeholder="Password" type="password">
+                        </div>
+                        <div class=" field">
+                            <label>Email</label>
+                            <input v-model="email" placeholder="Email" type="email">
+                        </div>
+                        <button id="btnRegister" class="ui button blue" v-on:click="onLogin">Sign up</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <div class="ui button">Cancel</div>
+            </div>
+        </div>
+
+
+
+    </div>
+    <script type="text/javascript" src="dist/jquery.min.js"></script>
+    <script type="text/javascript" src="dist/semantic.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.ui.dropdown').dropdown();
+            $('#btnLogin').click(function() {
+                $('#modalLogin').modal('show')
+            })
+            $('#btnSignup').click(function() {
+                $('#modalSignup').modal('show')
+            })
+            $('#btnSubmitLogin').click(function() {
+                $('#modalLogin').modal('hide')
+            })
+            $('.btnAddToCart').click(function() {
+                alert('hello')
+                //$('#modalCart').modal('show')
+            })
+        });
+    </script>
+    <script>
+        var app = new Vue({
+            el: '#main',
+            data: {
+                message: '',
+                navbar: 'LikeCounter',
+                username: '',
+                password: '',
+                login: true,
+                books: [],
+                carts: []
+            },
+            methods: {
+                onLogin: function() {
+                    let self = this
+                    axios.post('http://localhost:3000/users/signin', {
+                            username: self.username,
+                            password: self.password
+                        }, {
+                            headers: {
+                                token: localStorage.getItem('token')
+                            }
+                        })
+                        .then(response => {
+                            if (response.data.hasOwnProperty('error')) {
+                                self.message = response.data.error.errmsg
+                            } else {
+                                self.login = false;
+                                self.username = response.data.decoded.username
+                                localStorage.setItem('token', response.data.token);
+                                let tmp = localStorage.getItem('token')
+                                //self.getListBook()
+                                console.log("lagi disini ", tmp)
+                            }
+                        })
+                        .catch(error => {
+                            alert('error')
+                            console.log(error)
+                        })
+                },
+                signOut: function() {
+                    let self = this
+                    self.login = true;
+                    //localStorage.clear();
+                },
+                getListBook: function() {
+                    let self = this
+                    axios.get('http://localhost:3000/books')
+                        .then(response => {
+                            if (response.data.hasOwnProperty('error')) {
+                                self.message = response.data.error.errmsg
+                            } else {
+                                response.data !== "You must login!" ? self.books.push(response.data) : console.log(self.books)
+                                //console.log(self.books[0][0].title)
+                                console.log('booknya ', response.data)
+
+                            }
+                        })
+                        .catch(error => {
+                            alert('error')
+                            console.log(error)
+                        })
+                },
+                addToCart: function(objBook) {
+                    let self = this
+                    self.carts.push(objBook)
+                }
+
+            },
+            created: function() {
+                //this.getListBook()
+            }
+        })
+    </script>
+</body>
+
+</html>
