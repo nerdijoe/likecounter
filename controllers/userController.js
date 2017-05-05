@@ -88,7 +88,9 @@ exports.get_media_recent = (req, res, next) => {
   //   console.log(err)
   // })
 
-  var userid = "187611459"
+  // var userid = "187611459" //nerdijoe
+    var userid = "5418877821"
+
   // var userid = "493881988"
 
   var url = `https://api.instagram.com/v1/users/${userid}/media/recent/?access_token=${process.env.ACCESS_TOKEN}`
