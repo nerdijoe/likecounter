@@ -16,7 +16,10 @@ router.post('/signup', user_controller.signup);
 // router.post('/signin', user_controller.signin);
 router.post('/signin', passport.authenticate('local', {session: false}) ,user_controller.signin_passport);
 
-router.get('/instagram', user_controller.get_access_token);
+router.get('/instagram/login', user_controller.instagram_login);
+
+// instagram callback uri
+router.get('/instagram', user_controller.get_access_token_and_create_user);
 
 router.get('/instagram/get_media_recent', user_controller.get_media_recent);
 router.get('/instagram/get_media_recent/:tag', user_controller.get_media_recent_by_tag);

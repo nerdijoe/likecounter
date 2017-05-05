@@ -7,6 +7,8 @@ var userSchema = new Schema({
   email: String,
   password: String,
   username_insta: String,
+  id_insta: String,
+  profile_picture: String,
   access_token: String
 })
 
