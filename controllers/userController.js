@@ -158,19 +158,47 @@ exports.get_media_recent = (req, res, next) => {
   //   console.log(err)
   // })
 
-  var userid = "187611459"
-  // var userid = "493881988"
+  // var userid = "187611459"
+  // // var userid = "493881988"
+  //
+  // var url = `https://api.instagram.com/v1/users/${userid}/media/recent/?access_token=${process.env.ACCESS_TOKEN}`
+  //
+  // axios.get(url)
+  // .then(function (response) {
+  //   console.log(response);
+  //   res.send(response.data);
+  // })
+  // .catch(function (error) {
+  //   console.log(error);
+  // });
+  //
 
-  var url = `https://api.instagram.com/v1/users/${userid}/media/recent/?access_token=${process.env.ACCESS_TOKEN}`
+  jwt.verify(req.headers.token, process.env.TOKEN_SECRET, (err, decoded) => {
+    if(decoded) {
+      console.log(`decoded data is: `, decoded);
+      console.log(typeof decoded);
+      console.log(decoded.id_insta);
+      var userid = decoded.id_insta;
+      var access_token = decoded.access_token;
 
-  axios.get(url)
-  .then(function (response) {
-    console.log(response);
-    res.send(response.data);
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
+      var url = `https://api.instagram.com/v1/users/${userid}/media/recent/?access_token=${access_token}`
+
+      axios.get(url)
+      .then(function (response) {
+        console.log(response);
+        res.send(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+      // end of axios.get
+
+    } // end of if(decoded)
+    else {
+      res.send(err);
+    }
+  }) // end of jwt.verify
+
 
 }
 
@@ -201,16 +229,17 @@ exports.get_media_recent_by_tag = (req, res, next) => {
           if (m.tags.includes(tag))
             result.push(m);
         })
-
-
         res.send(result);
+
       })
       .catch(function (error) {
         console.log(error);
       });
+      // end of axios.get
 
 
-    } else {
+    } // end of if(decoded)
+    else {
       res.send(err);
     }
   }) // end of jwt.verify

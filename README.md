@@ -38,12 +38,27 @@ POST localhost:3000/users/signin
 ```
 
 ## Instagram API
-### Get User Recent Media
+
+### Instagram Sign In
+```
+http://localhost:3000/users/instagram/login
+```
+#### Notes:
+Instagram user needs to be registered as sandbox user first.
+
+
+### End Points
+#### Notes:
+User needs to sign in to get the **token**.
+
+Then embed the **token** to the **HEADER** when making below requests:
+
+#### Get User Recent Media
 ```
 GET localhost:3000/users/instagram/get_media_recent
 ```
 
-### Get User Recent Media by Tag
+#### Get User Recent Media by Tag
 ```
 GET localhost:3000/users/instagram/get_media_recent/[tag]
 ```
