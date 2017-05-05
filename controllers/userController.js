@@ -6,8 +6,9 @@ var jwt = require('jsonwebtoken');
 var axios = require('axios');
 var jwt_helper = require('../helpers/jwt');
 
-var InstagramAPI = require('instagram-api');
-var instagramAPI = new InstagramAPI(process.env.ACCESS_TOKEN);
+var Insta = require('../models/insta');
+var insta = new Insta();
+
 
 exports.signup = (req, res, next) => {
   var newUser = User({
@@ -167,55 +168,36 @@ exports.get_access_token_and_create_user = (req, res, next) => {
 
 
 exports.get_media_recent = (req, res, next) => {
-  // instagramAPI.userMedia("nerdijoe")
-  // .then ( result => {
-  //   console.log(result.data);
-  //   res.send(result);
-  // }, err => {
-  //   console.log(err)
-  // })
+  insta.get_media_recent( req.headers.token , data => {
+    res.send(data);
+  })
 
-  // var userid = "187611459"
-  // // var userid = "493881988"
+  // jwt.verify(req.headers.token, process.env.TOKEN_SECRET, (err, decoded) => {
+  //   if(decoded) {
+  //     console.log(`decoded data is: `, decoded);
+  //     console.log(typeof decoded);
+  //     console.log(decoded.id_insta);
+  //     var userid = decoded.id_insta;
+  //     var access_token = decoded.access_token;
   //
-  // var url = `https://api.instagram.com/v1/users/${userid}/media/recent/?access_token=${process.env.ACCESS_TOKEN}`
+  //     var url = `https://api.instagram.com/v1/users/${userid}/media/recent/?access_token=${access_token}`
   //
-  // axios.get(url)
-  // .then(function (response) {
-  //   console.log(response);
-  //   res.send(response.data);
-  // })
-  // .catch(function (error) {
-  //   console.log(error);
-  // });
+  //     axios.get(url)
+  //     .then(function (response) {
+  //       console.log(response);
+  //       res.send(response.data);
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  //     // end of axios.get
   //
-
-  jwt.verify(req.headers.token, process.env.TOKEN_SECRET, (err, decoded) => {
-    if(decoded) {
-      console.log(`decoded data is: `, decoded);
-      console.log(typeof decoded);
-      console.log(decoded.id_insta);
-      var userid = decoded.id_insta;
-      var access_token = decoded.access_token;
-
-      var url = `https://api.instagram.com/v1/users/${userid}/media/recent/?access_token=${access_token}`
-
-      axios.get(url)
-      .then(function (response) {
-        console.log(response);
-        res.send(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-      // end of axios.get
-
-    } // end of if(decoded)
-    else {
-      res.send(err);
-    }
-  }) // end of jwt.verify
-
+  //   } // end of if(decoded)
+  //   else {
+  //     res.send(err);
+  //   }
+  // }) // end of jwt.verify
+  //
 
 }
 
@@ -223,43 +205,47 @@ exports.get_media_recent_by_tag = (req, res, next) => {
   var tag = req.params.tag;
   console.log(`search by tag: '${tag}'`);
 
+  insta.get_media_recent_by_tag( req.headers.token, tag, (data) => {
+    res.send(data);
+  })
+
   // decode token to get the instagram_id
-  jwt.verify(req.headers.token, process.env.TOKEN_SECRET, (err, decoded) => {
-    if(decoded) {
-      console.log(`decoded data is: `, decoded);
-      console.log(typeof decoded);
-      console.log(decoded.id_insta);
-      var userid = decoded.id_insta;
-      var access_token = decoded.access_token;
-
-      var url = `https://api.instagram.com/v1/users/${userid}/media/recent/?access_token=${access_token}`
-
-      axios.get(url)
-      .then(function (response) {
-        // console.log(response);
-        let media = response.data.data;
-
-        console.log(media);
-
-        let result = []
-        media.map( m => {
-          if (m.tags.includes(tag))
-            result.push(m);
-        })
-        res.send(result);
-
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-      // end of axios.get
-
-
-    } // end of if(decoded)
-    else {
-      res.send(err);
-    }
-  }) // end of jwt.verify
+  // jwt.verify(req.headers.token, process.env.TOKEN_SECRET, (err, decoded) => {
+  //   if(decoded) {
+  //     console.log(`decoded data is: `, decoded);
+  //     console.log(typeof decoded);
+  //     console.log(decoded.id_insta);
+  //     var userid = decoded.id_insta;
+  //     var access_token = decoded.access_token;
+  //
+  //     var url = `https://api.instagram.com/v1/users/${userid}/media/recent/?access_token=${access_token}`
+  //
+  //     axios.get(url)
+  //     .then(function (response) {
+  //       // console.log(response);
+  //       let media = response.data.data;
+  //
+  //       console.log(media);
+  //
+  //       let result = []
+  //       media.map( m => {
+  //         if (m.tags.includes(tag))
+  //           result.push(m);
+  //       })
+  //       res.send(result);
+  //
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  //     // end of axios.get
+  //
+  //
+  //   } // end of if(decoded)
+  //   else {
+  //     res.send(err);
+  //   }
+  // }) // end of jwt.verify
 
 
 
