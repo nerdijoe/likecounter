@@ -36,12 +36,22 @@ exports.signin_passport = (req, res, next) => {
   let user = req.user;
   console.log(user);
 
+  // var token = jwt.sign(
+  //   { username: user.username, email: user.username, access_token: user.access_token},
+  //   process.env.TOKEN_SECRET,
+  //   { expiresIn: '1h' }
+  // );
+  // res.send(token);
+
+  // create token
   var token = jwt.sign(
-    { username: user.username, email: user.username, access_token: user.access_token},
+    { username: user.username, id_insta: user.id_insta, access_token: user.access_token, profile_picture: user.profile_picture},
     process.env.TOKEN_SECRET,
     { expiresIn: '1h' }
   );
   res.send(token);
+
+
 }
 
 exports.instagram_login = (req, res, next) => {
@@ -104,10 +114,12 @@ exports.get_access_token_and_create_user = (req, res, next) => {
       if(err) res.send(err);
 
       // if user is not found, create user
+      // for now, set password value to username
       if(!user){
         var newUser = User({
           name: insta_data.user.full_name,
           username: insta_data.user.username,
+          password: passwordHash.generate(insta_data.user.username),
           username_insta: insta_data.user.username,
           id_insta: insta_data.user.id,
           profile_picture: insta_data.user.profile_picture,
@@ -118,23 +130,28 @@ exports.get_access_token_and_create_user = (req, res, next) => {
           if(err) res.send(err);
 
           //create token
-          var token = jwt.sign(
-            { username: user.username, id_insta: user.id_insta, access_token: user.access_token},
-            process.env.TOKEN_SECRET,
-            { expiresIn: '1h' }
-          );
-          res.send(token);
+          // var token = jwt.sign(
+          //   { username: user.username, id_insta: user.id_insta, access_token: user.access_token, profile_picture: user.profile_picture},
+          //   process.env.TOKEN_SECRET,
+          //   { expiresIn: '1h' }
+          // );
+          // res.send(token);
+
+          res.redirect('http://localhost:8080')
 
         })
       }
       // user is already existed, just create token
       else {
-        var token = jwt.sign(
-          { username: user.username, id_insta: user.id_insta, access_token: user.access_token},
-          process.env.TOKEN_SECRET,
-          { expiresIn: '1h' }
-        );
-        res.send(token);
+        // var token = jwt.sign(
+        //   { username: user.username, id_insta: user.id_insta, access_token: user.access_token, profile_picture: user.profile_picture},
+        //   process.env.TOKEN_SECRET,
+        //   { expiresIn: '1h' }
+        // );
+        // res.send(token);
+
+        res.redirect('http://localhost:8080')
+
       }
 
     })
