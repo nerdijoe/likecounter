@@ -4,7 +4,6 @@ require('dotenv').config();
 var passwordHash = require('password-hash');
 var jwt = require('jsonwebtoken');
 var axios = require('axios');
-var jwt_helper = require('../helpers/jwt');
 
 var Insta = require('../models/insta');
 var insta = new Insta();
@@ -37,13 +36,6 @@ exports.signin_passport = (req, res, next) => {
   let user = req.user;
   console.log(user);
 
-  // var token = jwt.sign(
-  //   { username: user.username, email: user.username, access_token: user.access_token},
-  //   process.env.TOKEN_SECRET,
-  //   { expiresIn: '1h' }
-  // );
-  // res.send(token);
-
   // create token
   var token = jwt.sign(
     { username: user.username, id_insta: user.id_insta, access_token: user.access_token, profile_picture: user.profile_picture},
@@ -51,8 +43,6 @@ exports.signin_passport = (req, res, next) => {
     { expiresIn: '1h' }
   );
   res.send(token);
-
-
 }
 
 exports.instagram_login = (req, res, next) => {
@@ -98,6 +88,7 @@ exports.get_access_token_and_create_user = (req, res, next) => {
   // querystring will format data json similar to postman's POST body
   var querystring = require('querystring');
 
+  // get Instagram access_token
   axios.post('https://api.instagram.com/oauth/access_token', querystring.stringify({
     client_id: process.env.INSTAGRAM_CLIENT_ID,
     client_secret: process.env.INSTAGRAM_CLIENT_SECRET,
@@ -130,36 +121,17 @@ exports.get_access_token_and_create_user = (req, res, next) => {
         newUser.save( (err, user) => {
           if(err) res.send(err);
 
-          //create token
-          // var token = jwt.sign(
-          //   { username: user.username, id_insta: user.id_insta, access_token: user.access_token, profile_picture: user.profile_picture},
-          //   process.env.TOKEN_SECRET,
-          //   { expiresIn: '1h' }
-          // );
-          // res.send(token);
-
+          // token is created when user is signin normally
           res.redirect('http://localhost:8080')
-
         })
       }
-      // user is already existed, just create token
+      // user is already existed, just redirect to index
       else {
-        // var token = jwt.sign(
-        //   { username: user.username, id_insta: user.id_insta, access_token: user.access_token, profile_picture: user.profile_picture},
-        //   process.env.TOKEN_SECRET,
-        //   { expiresIn: '1h' }
-        // );
-        // res.send(token);
-
+        // token is created when user is signin normally
         res.redirect('http://localhost:8080')
-
       }
 
-    })
-
-    // create token
-
-    // res.send(response.data);
+    }) // end of User.findOne
   })
   .catch(function (error) {
     console.log(error);
@@ -171,34 +143,6 @@ exports.get_media_recent = (req, res, next) => {
   insta.get_media_recent( req.headers.token , data => {
     res.send(data);
   })
-
-  // jwt.verify(req.headers.token, process.env.TOKEN_SECRET, (err, decoded) => {
-  //   if(decoded) {
-  //     console.log(`decoded data is: `, decoded);
-  //     console.log(typeof decoded);
-  //     console.log(decoded.id_insta);
-  //     var userid = decoded.id_insta;
-  //     var access_token = decoded.access_token;
-  //
-  //     var url = `https://api.instagram.com/v1/users/${userid}/media/recent/?access_token=${access_token}`
-  //
-  //     axios.get(url)
-  //     .then(function (response) {
-  //       console.log(response);
-  //       res.send(response.data);
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     });
-  //     // end of axios.get
-  //
-  //   } // end of if(decoded)
-  //   else {
-  //     res.send(err);
-  //   }
-  // }) // end of jwt.verify
-  //
-
 }
 
 exports.get_media_recent_by_tag = (req, res, next) => {
@@ -208,45 +152,5 @@ exports.get_media_recent_by_tag = (req, res, next) => {
   insta.get_media_recent_by_tag( req.headers.token, tag, (data) => {
     res.send(data);
   })
-
-  // decode token to get the instagram_id
-  // jwt.verify(req.headers.token, process.env.TOKEN_SECRET, (err, decoded) => {
-  //   if(decoded) {
-  //     console.log(`decoded data is: `, decoded);
-  //     console.log(typeof decoded);
-  //     console.log(decoded.id_insta);
-  //     var userid = decoded.id_insta;
-  //     var access_token = decoded.access_token;
-  //
-  //     var url = `https://api.instagram.com/v1/users/${userid}/media/recent/?access_token=${access_token}`
-  //
-  //     axios.get(url)
-  //     .then(function (response) {
-  //       // console.log(response);
-  //       let media = response.data.data;
-  //
-  //       console.log(media);
-  //
-  //       let result = []
-  //       media.map( m => {
-  //         if (m.tags.includes(tag))
-  //           result.push(m);
-  //       })
-  //       res.send(result);
-  //
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     });
-  //     // end of axios.get
-  //
-  //
-  //   } // end of if(decoded)
-  //   else {
-  //     res.send(err);
-  //   }
-  // }) // end of jwt.verify
-
-
 
 }
