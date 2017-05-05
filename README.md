@@ -49,7 +49,9 @@ Instagram user needs to be registered as sandbox user first.
 
 ### End Points
 #### Notes:
-User needs to sign in to get the **token**.
+After Instagram sign in, user has been authorize to use the app. It will redirect to **localhost:8080**
+
+User needs to **NORMAL sign in** to get the **token**.
 
 Then embed the **token** to the **HEADER** when making below requests:
 
