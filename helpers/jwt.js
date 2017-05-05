@@ -3,7 +3,7 @@ require('dotenv').config();
 
 module.exports = {
   verify_admin: (req, res, next) => {
-    jwt.verify(req.headers.token, process.env.SECRET, (err, decoded) => {
+    jwt.verify(req.headers.token, process.env.TOKEN_SECRET, (err, decoded) => {
       if(decoded) {
         console.log(`decoded data is: `, decoded);
         if(decoded.role === 0) {
@@ -19,7 +19,7 @@ module.exports = {
     }) // end of jwt.verify
   }, // end of verify_admin
   verify_normal: (req, res, next) => {
-    jwt.verify(req.headers.token, process.env.SECRET, (err, decoded) => {
+    jwt.verify(req.headers.token, process.env.TOKEN_SECRET, (err, decoded) => {
       if(decoded) {
         console.log(`decoded data is: `, decoded);
         next();
