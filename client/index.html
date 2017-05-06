@@ -27,7 +27,7 @@
 
             <div class="right menu" v-if="login">
                 <div class="item"><button class="ui green button" id="btnLogin">Sign in</button></div>
-                <div class="item"><a class="ui primary button" href="http://localhost:3000/users/instagram/login">SignIn IG</a></div>
+                <div class="item"><a class="ui primary icon button" href="http://localhost:3000/users/instagram/login"><i class="instagram icon"></i> SignIn IG</a></div>
 
             </div>
             <div class="right menu" v-else>
@@ -163,6 +163,24 @@
             </div>
         </div>
 
+
+
+        <div class="ui basic modal" id="modalNotification">
+    <div class="ui icon header">
+      <i class="instagram icon"></i>
+
+    </div>
+    <div class="content ui center aligned header">
+      <h3>You Must Login !</h3>
+    </div>
+    <div class="actions">
+
+      <div class="ui green ok inverted button">
+        <i class="checkmark icon"></i>
+        Yes
+      </div>
+    </div>
+  </div>
     </div>
     <script type="text/javascript" src="dist/jquery.min.js"></script>
     <script type="text/javascript" src="dist/semantic.min.js"></script>
@@ -181,6 +199,8 @@
             $('#btnSubmitRegister').click(function() {
                 $('#modalSignup').modal('hide')
             })
+
+
         });
     </script>
 
@@ -272,7 +292,8 @@
                             //     // console.log('image ', response.data.data[0].tags)
                             // }
                             if (response.config.headers.token == null) {
-                              alert('Please login!')
+                              $('#modalNotification').modal('show')
+                              //alert('Please login!'
                             } else {
                                 self.listPost = []
                                 self.listPost.push(response.data)
@@ -302,7 +323,8 @@
                             //     self.listPost.push(response)
                             // }
                             if (response.config.headers.token == null) {
-                              alert('Please login!')
+                              //alert('Please login!')
+                              $('#modalNotification').modal('show')
                             } else {
                                 self.listPost = []
                                 self.listPost.push(response)
